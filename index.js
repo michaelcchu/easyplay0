@@ -34,7 +34,8 @@ function convertNotesToFrequencies() {
 
 function down(e) {
     e.preventDefault();
-    const strPress = "" + press;
+    const press = e.pointerId;
+    strPress = ""+press;
     if (on && !badKeys.some(badKey => strPress.includes(badKey)) && !paused
         && (index < frequencies.length) && !e.repeat && (press != activePress)
         && (document.activeElement.nodeName !== 'INPUT')) {
@@ -51,12 +52,6 @@ function down(e) {
 }
 
 function format(x) {return x.trim().toLowerCase();}
-
-function key(e) { 
-    if (e.type.includes("key")) {press = e.key;} 
-    else {press = e.changedTouches[0].identifier;}
-    if (["keydown","touchstart"].includes(e.type)) {down(e);} else {up(e);}
-}
 
 function pause() { paused = true; oscillator.frequency.value = 0; }
 
@@ -99,7 +94,8 @@ function unbundle(note) {
 }
 
 function up(e) {
-    if (on && (press === activePress)) {
+    e.preventDefault();
+    if (on && (e.pointerId === activePress)) {
         gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.015);
         activePress = null;
     }
@@ -118,6 +114,30 @@ reader.addEventListener("load", (e) => {
 });
 const touchstart = (e) => {keydown(e);}; const touchend = (e) => {keyup(e);};
 const buttonFuncs = [start,pause,resume];
-const docEventTypes = ["keydown","keyup","touchstart","touchend"];
-for (f of buttonFuncs) {byId(f.name).addEventListener("click", f);} 
-for (et of docEventTypes) {document.addEventListener(et, key);}
+//const docEventTypes = ["keydown","keyup","touchstart","touchend"];
+const docEventTypes = [down,up];
+for (f of buttonFuncs) {byId(f.name).addEventListener("click", f);}
+
+const canvas = document.getElementById("tap-area");
+const context = canvas.getContext("2d");
+
+for (et of docEventTypes) {canvas.addEventListener("pointer"+et.name, et, {passive: false});}
+
+context.fillStyle="#FF0000";
+context.fillRect(0,0,canvas.width,canvas.height);
+
+const observer = new PerformanceObserver((list) => {
+    list.getEntries().forEach((entry) => {
+      console.log(
+        `The time to ${entry.name} was ${entry.startTime} milliseconds.`
+      );
+      // Logs "The time to first-paint was 386.7999999523163 milliseconds."
+      // Logs "The time to first-contentful-paint was 400.6999999284744 milliseconds."
+    });
+  });
+  
+  observer.observe({ type: "paint", buffered: true });
+
+  document.body.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+  }, false); 
