@@ -141,3 +141,15 @@ const observer = new PerformanceObserver((list) => {
   document.body.addEventListener('touchmove', function(event) {
     event.preventDefault();
   }, false); 
+
+  document.body.addEventListener('pointerover', function(event) {
+    event.preventDefault();
+  }, false); 
+
+  document.body.addEventListener('pointerdown', function(event) {
+    event.preventDefault();
+  }, false); 
+
+  document.body.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+  }, false); 
