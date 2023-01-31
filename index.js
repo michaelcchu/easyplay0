@@ -138,18 +138,18 @@ const observer = new PerformanceObserver((list) => {
   
   observer.observe({ type: "paint", buffered: true });
 
-  document.body.addEventListener('touchmove', function(event) {
+  canvas.addEventListener('touchmove', function(event) {
     event.preventDefault();
   }, false); 
 
-  document.body.addEventListener('pointerover', function(event) {
+  canvas.addEventListener('pointerover', function(event) {
     event.preventDefault();
   }, false); 
 
-  document.body.addEventListener('pointerdown', function(event) {
+  canvas.addEventListener('pointerdown', function(event) {
     event.preventDefault();
   }, false); 
 
-  document.body.addEventListener('touchstart', function(event) {
+  canvas.addEventListener('touchstart', function(event) {
     event.preventDefault();
   }, false); 
