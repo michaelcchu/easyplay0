@@ -50,7 +50,7 @@ function down(e) {
             oscillator.frequency.setTargetAtTime(freq, 
                 audioContext.currentTime, 0.003)    
         }
-        gainNode.gain.setTargetAtTime(normalGain, 
+        gainNode.gain.setTargetAtTime(gain, 
             audioContext.currentTime, 0.015);
         activePress = press; index++;
     }
@@ -156,5 +156,9 @@ const observer = new PerformanceObserver((list) => {
   }, false); 
 
   canvas.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+  }, false); 
+
+  canvas.addEventListener('focus', function(event) {
     event.preventDefault();
   }, false); 
