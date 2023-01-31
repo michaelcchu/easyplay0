@@ -34,19 +34,24 @@ function convertNotesToFrequencies() {
 
 function down(e) {
     e.preventDefault();
+    let gain = 0;
     const press = e.pointerId;
     strPress = ""+press;
     if (on && !badKeys.some(badKey => strPress.includes(badKey)) && !paused
         && (index < frequencies.length) && !e.repeat && (press != activePress)
         && (document.activeElement.nodeName !== 'INPUT')) {
+        const freq = frequencies[index];
+        if (freq > 0) {
+            gain = normalGain * (49 / freq);
+        }
         if (activePress === null) {
-            oscillator.frequency.value = frequencies[index];
-            gainNode.gain.setTargetAtTime(normalGain, 
-                audioContext.currentTime, 0.015);
+            oscillator.frequency.value = freq;
         } else {
-            oscillator.frequency.setTargetAtTime(frequencies[index], 
+            oscillator.frequency.setTargetAtTime(freq, 
                 audioContext.currentTime, 0.003)    
         }
+        gainNode.gain.setTargetAtTime(normalGain, 
+            audioContext.currentTime, 0.015);
         activePress = press; index++;
     }
 }
