@@ -1,13 +1,10 @@
 const audioContext = new AudioContext();
-const badKeys = ["Alt","Arrow","Audio","Enter","Launch","Meta","Play","Tab"];
-const emptyLine = " ".repeat(128 + 4);
 const fileInput = byId("fileInput");
 const gainNode = new GainNode(audioContext);
 const oscillator = new OscillatorNode(audioContext, {frequency: 0});
 const reader = new FileReader();
 const select = byId("track");
 const value = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1};
-const width = 128 + 4 + 1;
 
 let activePress; let frequencies; let index; let indents; let midi; 
 let normalGain; let notes; let octave; let on = false; let paused; let press; 
@@ -37,8 +34,8 @@ function down(e) {
     let gain = 0;
     const press = e.pointerId;
     strPress = ""+press;
-    if (on && !badKeys.some(badKey => strPress.includes(badKey)) && !paused
-        && (index < frequencies.length) && !e.repeat && (press != activePress)
+    if (on && !paused
+        && (index < frequencies.length) && (press != activePress)
         && (document.activeElement.nodeName !== 'INPUT')) {
         const freq = frequencies[index];
         if (freq > 0) {
@@ -119,7 +116,6 @@ reader.addEventListener("load", (e) => {
 });
 const touchstart = (e) => {keydown(e);}; const touchend = (e) => {keyup(e);};
 const buttonFuncs = [start,pause,resume];
-//const docEventTypes = ["keydown","keyup","touchstart","touchend"];
 const docEventTypes = [down,up];
 for (f of buttonFuncs) {byId(f.name).addEventListener("click", f);}
 
@@ -147,18 +143,71 @@ const observer = new PerformanceObserver((list) => {
     event.preventDefault();
   }, false); 
 
+
+// Turn off default event listeners
+
+canvas.addEventListener('focus', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false); 
+
+//
   canvas.addEventListener('pointerover', function(event) {
     event.preventDefault();
+    event.stopPropagation();
+  }, false); 
+
+  canvas.addEventListener('pointerenter', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
   }, false); 
 
   canvas.addEventListener('pointerdown', function(event) {
     event.preventDefault();
+    event.stopPropagation();
   }, false); 
 
   canvas.addEventListener('touchstart', function(event) {
     event.preventDefault();
+    event.stopPropagation();
   }, false); 
 
-  canvas.addEventListener('focus', function(event) {
+  canvas.addEventListener('gotpointercapture', function(event) {
     event.preventDefault();
+    event.stopPropagation();
+  }, false);
+
+  canvas.addEventListener('pointermove', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false);
+
+  canvas.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false);
+
+  canvas.addEventListener('pointerup', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false); 
+
+  canvas.addEventListener('lostpointercapture', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false); 
+
+  canvas.addEventListener('pointerout', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false); 
+
+  canvas.addEventListener('pointerleave', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }, false); 
+
+  canvas.addEventListener('touchend', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
   }, false); 
